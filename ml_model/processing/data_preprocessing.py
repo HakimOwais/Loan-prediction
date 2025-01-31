@@ -7,7 +7,7 @@ import sys
 PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent.parent
 sys.path.append(str(PACKAGE_ROOT))
 
-from configs import config
+from ml_model.configs import config
 import numpy as np
 
 class DropColumns(BaseEstimator,TransformerMixin):

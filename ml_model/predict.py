@@ -25,7 +25,7 @@ def generate_predictions():
     test_data = load_dataset(config.TEST_FILE)
     X,y = separate_data(test_data)
     pred = classification_pipeline.predict(X)
-    output = np.where(pred==1,'Approved','Not Approved')
+    output = np.where(pred==1,'Eligible','Not Eligible')
     print(output)
     return output
 

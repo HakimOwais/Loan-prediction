@@ -9,7 +9,7 @@ import sys
 PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent.parent
 sys.path.append(str(PACKAGE_ROOT))
 
-from configs import config
+from ml_model.configs import config
 
 #Load the dataset
 def load_dataset(file_name):
