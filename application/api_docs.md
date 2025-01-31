@@ -1,4 +1,3 @@
-```markdown
 # Loan Prediction API Documentation
 
 ## Overview
