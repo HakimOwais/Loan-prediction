@@ -46,16 +46,16 @@ def index():
 def predict_loan_status(loan_details: LoanPred):
 	data = loan_details.model_dump()
 	new_data = {
-    'no_of_dependents': data['Dependents'],
+    'no_of_dependents': data['Dependents'],  # number of people an applicant is financially responsible for, like children or spouses, 
     'education': data['Education'], # e.g Graduate or Non Graduate
     'self_employed': data['Self_Employed'], #Yes or No
     'income_annum': data['TotalIncome'],  # 9600000
     'loan_amount': data['LoanAmount'], 
     'loan_term': data['Loan_Amount_Term'], # years
     'cibil_score': data['Credit_History'], # score
-    'residential_assets_value': data['Residential_Assets_Value'],
-    'commercial_assets_value': data['Commercial_Assets_Value'],
-    'luxury_assets_value': data['Luxury_Assets_Value'],
+    'residential_assets_value': data['Residential_Assets_Value'],  # market value of the borrower's primary residence
+    'commercial_assets_value': data['Commercial_Assets_Value'], # e.g., property, equipment 
+    'luxury_assets_value': data['Luxury_Assets_Value'], # cars etc
     'bank_asset_value': data['Bank_Asset_Value']
 	}
 
