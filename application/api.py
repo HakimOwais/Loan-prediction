@@ -1,5 +1,6 @@
 # Importing Dependencies
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import joblib
@@ -20,6 +21,14 @@ classification_pipeline = load_pipeline(config.MODEL_NAME)
 
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to allow only specific origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Adjust this to allow only specific methods
+    allow_headers=["*"],  # Adjust this to allow only specific headers
+)
 
 
 #Perform parsing
