@@ -1,5 +1,5 @@
 # Importing Dependencies
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
@@ -9,6 +9,10 @@ import pandas as pd
 import sys
 import os
 from pathlib import Path
+from src.components import vector_store
+import json
+from typing import Dict, List
+
 # # Adding the below path to avoid module not found error
 PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
@@ -80,6 +84,70 @@ def predict_loan_status(loan_details: LoanPred):
 		pred = 'Eligible'
 
 	return {'Status of Loan Application':pred}
+
+
+
+category_questions = {
+    "student": [
+        {"question": "Do you frequently spend on food, education, or entertainment?", "type": "yes_no"},
+        {"question": "Do you shop online or dine out frequently?", "type": "yes_no"},
+        {"question": "What do you prefer?", "type": "dropdown", "options": ["Cashback", "Rewards", "Discounts"]},
+        {"question": "Do you travel internationally?", "type": "yes_no"},
+        {"question": "Do you want to build credit and save on fees?", "type": "yes_no"}
+    ],
+    "salaried": [
+        {"question": "Do you want cashback on bill payments & online shopping?", "type": "yes_no"},
+        {"question": "Do you prefer travel benefits (lounge access, air miles, discounts)?", "type": "yes_no"},
+        {"question": "Are you looking for a low annual fee card?", "type": "yes_no"},
+        {"question": "Do you need a credit card with high reward points?", "type": "yes_no"}
+    ],
+    "business": [
+        {"question": "Do you frequently make high-value transactions?", "type": "yes_no"},
+        {"question": "Do you want a corporate credit card for employees?", "type": "yes_no"},
+        {"question": "Do you prefer business travel perks (lounge access, flight upgrades, hotel discounts)?", "type": "yes_no"},
+        {"question": "Do you need higher credit limits?", "type": "yes_no"}
+    ]
+}
+
+# Endpoint to get category-specific questions
+@app.get("/get-questions/{category}")
+def get_questions(category: str):
+    if category.lower() not in category_questions:
+        raise HTTPException(status_code=400, detail="Invalid category. Choose from: student, salaried, business")
+    return {"category": category, "questions": category_questions[category.lower()]}
+
+# Define input model for card recommendation
+class RecommendationRequest(BaseModel):
+    category: str
+    answers: Dict[str, str]
+
+# Endpoint to recommend a card
+@app.post("/recommend-card")
+def recommend_card(request: RecommendationRequest):
+    category = request.category.lower()
+    user_input = request.answers
+    
+    if category not in category_questions:
+        raise HTTPException(status_code=400, detail="Invalid category")
+
+    # Convert user input into a query
+    query = f"User Category: {category}, Preferences: {json.dumps(user_input)}"
+
+    # Define MongoDB filter
+    filter_condition = {"category": category}
+
+    # Fetch recommended cards
+    results = vector_store.similarity_search(query, k=3, pre_filter=filter_condition)
+
+    if not results:
+        return {"message": "No matching cards found for your preferences."}
+
+    recommended_cards = [
+        {"card_name": res.metadata.get("cardName"), "about_card": res.page_content}
+        for res in results
+    ]
+
+    return {"category": category, "recommendations": recommended_cards}
 
 if __name__ == '__main__':
 	uvicorn.run(app, host='127.0.0.1', port=8080)
