@@ -1,0 +1,167 @@
+[
+    {
+      "cardName": "Campus Saver Debit Card",
+      "type": "Debit",
+      "category": "Student",
+      "benefits": [
+        "Zero annual fee",
+        "5% cashback on food & entertainment",
+        "2 free ATM withdrawals per month abroad"
+      ],
+      "aboutCard": "The Campus Saver Debit Card is designed for students, offering zero annual fees, 5% cashback on food and entertainment, and two free ATM withdrawals per month abroad. It is perfect for students looking to manage their finances while enjoying perks on everyday spending."
+    },
+    {
+      "cardName": "EduBoost Debit Card",
+      "type": "Debit",
+      "category": "Student",
+      "benefits": [
+        "2% cashback on education expenses",
+        "Special discounts on e-learning platforms",
+        "No minimum balance requirement"
+      ],
+      "aboutCard": "EduBoost Debit Card is tailored for students, providing 2% cashback on education-related expenses, exclusive discounts on e-learning platforms, and no minimum balance requirements, ensuring financial ease for students."
+    },
+    {
+      "cardName": "Swift Student Debit",
+      "type": "Debit",
+      "category": "Student",
+      "benefits": [
+        "3% cashback on online subscriptions",
+        "No foreign transaction fees"
+      ],
+      "aboutCard": "Swift Student Debit is a perfect card for students who love online services, offering 3% cashback on subscriptions like Netflix and Spotify, along with no foreign transaction fees, making it ideal for international purchases."
+    },
+    {
+      "cardName": "Aspire Student Credit",
+      "type": "Credit",
+      "category": "Student",
+      "benefits": [
+        "1% cashback on all spending",
+        "5% cashback on books & stationery",
+        "Low interest rate for new users"
+      ],
+      "aboutCard": "Aspire Student Credit is a great starter credit card for students, offering 1% cashback on all purchases, 5% cashback on books and stationery, and a low-interest rate for new users, making it a budget-friendly choice."
+    },
+    {
+      "cardName": "YouthPerks Credit Card",
+      "type": "Credit",
+      "category": "Student",
+      "benefits": [
+        "5% discount on travel tickets",
+        "3-month zero-interest EMI on gadgets",
+        "Up to 50% off on restaurants"
+      ],
+      "aboutCard": "YouthPerks Credit Card is perfect for students who love travel and technology, offering 5% discounts on travel tickets, zero-interest EMIs for gadgets, and up to 50% discounts on restaurants."
+    },
+    {
+      "cardName": "Bright Future Credit",
+      "type": "Credit",
+      "category": "Student",
+      "benefits": [
+        "No annual fee",
+        "4x reward points on education-related spends",
+        "Free international student ID benefits"
+      ],
+      "aboutCard": "Bright Future Credit offers no annual fees, 4x reward points on education-related purchases, and free international student ID benefits, making it an excellent financial tool for students."
+    },
+    {
+      "cardName": "SmartStart Credit Card",
+      "type": "Credit",
+      "category": "Student",
+      "benefits": [
+        "10% cashback on e-commerce purchases",
+        "0% interest for the first 6 months",
+        "Travel insurance"
+      ],
+      "aboutCard": "SmartStart Credit Card is a top pick for students who shop online, offering 10% cashback on e-commerce, 0% interest for the first six months, and free travel insurance."
+    },
+    {
+      "cardName": "SalaryPlus Debit Card",
+      "type": "Debit",
+      "category": "Salaried",
+      "benefits": [
+        "Free airport lounge access",
+        "Higher ATM withdrawal limits",
+        "5% cashback on fuel"
+      ],
+      "aboutCard": "SalaryPlus Debit Card is ideal for salaried professionals, offering free airport lounge access, higher ATM withdrawal limits, and 5% cashback on fuel purchases, making everyday expenses more rewarding."
+    },
+    {
+      "cardName": "Elite Rewards Debit",
+      "type": "Debit",
+      "category": "Salaried",
+      "benefits": [
+        "3x reward points on grocery shopping",
+        "Exclusive restaurant deals",
+        "Free personal accident insurance"
+      ],
+      "aboutCard": "Elite Rewards Debit provides exclusive benefits for salaried professionals, including 3x rewards on grocery shopping, discounts at restaurants, and free personal accident insurance for financial security."
+    },
+    {
+      "cardName": "Urban Lifestyle Debit",
+      "type": "Debit",
+      "category": "Salaried",
+      "benefits": [
+        "2% cashback on utility bills",
+        "Online shopping discounts",
+        "Priority customer service"
+      ],
+      "aboutCard": "Urban Lifestyle Debit is designed for working professionals who shop and pay bills online, offering 2% cashback on utility bills, discounts on e-commerce platforms, and priority customer service."
+    },
+    {
+      "cardName": "Prestige Salary Credit",
+      "type": "Credit",
+      "category": "Salaried",
+      "benefits": [
+        "Complimentary travel insurance",
+        "4x rewards on dining & entertainment",
+        "Zero forex markup"
+      ],
+      "aboutCard": "Prestige Salary Credit is perfect for salaried professionals who love to travel and dine out, offering complimentary travel insurance, 4x rewards on dining and entertainment, and zero forex markup on international transactions."
+    },
+    {
+      "cardName": "Platinum Rewards Credit",
+      "type": "Credit",
+      "category": "Salaried",
+      "benefits": [
+        "5% cashback on fuel, grocery, and movie tickets",
+        "Premium lifestyle benefits",
+        "Lounge access"
+      ],
+      "aboutCard": "Platinum Rewards Credit provides high-end benefits for salaried professionals, including 5% cashback on fuel, groceries, and movie tickets, plus premium lifestyle benefits like airport lounge access."
+    },
+    {
+      "cardName": "BizGrow Debit Card",
+      "type": "Debit",
+      "category": "Business",
+      "benefits": [
+        "Free NEFT/RTGS transactions",
+        "3% cashback on office supplies",
+        "High withdrawal limit"
+      ],
+      "aboutCard": "BizGrow Debit Card is tailored for business owners, offering free NEFT/RTGS transactions, 3% cashback on office supplies, and high ATM withdrawal limits to manage business expenses seamlessly."
+    },
+    {
+      "cardName": "Entrepreneur Debit Card",
+      "type": "Debit",
+      "category": "Business",
+      "benefits": [
+        "No annual charges",
+        "Airport lounge access",
+        "Fuel surcharge waiver"
+      ],
+      "aboutCard": "Entrepreneur Debit Card is ideal for business owners, featuring no annual charges, complimentary airport lounge access, and fuel surcharge waivers to reduce operational costs."
+    },
+    {
+      "cardName": "Titanium Business Credit",
+      "type": "Credit",
+      "category": "Business",
+      "benefits": [
+        "High credit limit",
+        "Free international travel insurance",
+        "Cashback on B2B transactions"
+      ],
+      "aboutCard": "Titanium Business Credit is designed for business professionals, offering high credit limits, free international travel insurance, and cashback on B2B transactions to enhance business operations."
+    }
+  ]
+  
