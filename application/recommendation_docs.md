@@ -1,4 +1,3 @@
-```markdown
 # Card Recommendation API
 
 ## Overview
