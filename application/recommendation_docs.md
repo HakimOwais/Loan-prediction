@@ -32,12 +32,12 @@ This API provides category-based questions and recommends suitable credit cards 
 
 ---
 
-### **2. Recommend a Credit Card**
+### **2. Recommendation API**
 **URL**: `/recommend-card`
 
 **Method**: `POST`
 
-**Description**: Recommends credit cards based on user responses.
+**Description**: Recommends cards based on user responses.
 
 **Request Body (JSON)**:
 ```json
