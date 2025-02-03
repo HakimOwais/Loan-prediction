@@ -19,7 +19,8 @@ PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
 from src.card_recommender import category_questions, recommend_card_based_on_user_input
 from src.components import vector_store
-from application.schema import RecommendationRequest
+from application.schema import RecommendationRequest, UserDetails
+from src.user_db import insert_user_details
 
 # # Then perform import
 from ml_model.configs import config 
@@ -127,6 +128,29 @@ def recommend_card(request: RecommendationRequest):
     ]
 
     return {"category": category, "recommendations": recommended_cards}
+
+@app.post("/users/")
+async def create_user(user: UserDetails):
+    try:
+        # Log user data before passing to insert function
+        print(f"Received user data: {user.dict()}")
+        
+        # Convert Pydantic model to a dictionary
+        user_data = user.dict()  # or user.model_dump()
+
+        # Insert user details into MongoDB and get the generated password
+        password = insert_user_details(user_data)
+        
+        return {"message": "User created successfully", "password": password}
+
+    except ValueError as e:
+        # If required fields are missing or invalid category
+        print(f"ValueError: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        # For other exceptions
+        print(f"Exception: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 if __name__ == '__main__':
 	uvicorn.run(app, host='127.0.0.1', port=8080)
