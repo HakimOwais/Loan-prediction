@@ -9,6 +9,7 @@ import pandas as pd
 import sys
 import os
 from pathlib import Path
+from fastapi import Query
 
 import json
 from typing import Dict, List
@@ -21,6 +22,7 @@ from src.card_recommender import category_questions, recommend_card_based_on_use
 from src.components import vector_store
 from application.schema import RecommendationRequest, UserDetails
 from src.user_db import insert_user_details
+
 
 # # Then perform import
 from ml_model.configs import config 
@@ -138,11 +140,15 @@ async def create_user(user: UserDetails):
         # Convert Pydantic model to a dictionary
         user_data = user.dict()  # or user.model_dump()
 
-        # Insert user details into MongoDB and get the generated password
+        # Insert user details into MongoDB and get the generated password and bank account number
         password = insert_user_details(user_data)
+        bank_account_number = insert_user_details(user_data)
+        return {
+            "message": "User created successfully",
+            "password": password,
+            "bank_account_number": bank_account_number
+        }
         
-        return {"message": "User created successfully", "password": password}
-
     except ValueError as e:
         # If required fields are missing or invalid category
         print(f"ValueError: {str(e)}")
@@ -151,6 +157,31 @@ async def create_user(user: UserDetails):
         # For other exceptions
         print(f"Exception: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+from src.components import client
+
+DB_NAME = "card_recommendation"
+USER_COLLECTIONS = "users"
+MONGODB_USER_COLLECTION = client[DB_NAME][USER_COLLECTIONS]
+
+@app.get("/get_users/")
+async def get_user(phone_number: str = Query(...), password: str = Query(...)):
+    try:
+        # Fetch user from MongoDB using phone number and password
+        user = MONGODB_USER_COLLECTION.find_one(
+            {"phone_number": phone_number, "password": password}, 
+            {"_id": 0}  # Exclude MongoDB's default `_id` field
+        )
+
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found or incorrect credentials")
+
+        return {"message": "User retrieved successfully", "user": user}
+
+    except Exception as e:
+        print(f"Exception: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 
 if __name__ == '__main__':
 	uvicorn.run(app, host='127.0.0.1', port=8080)
