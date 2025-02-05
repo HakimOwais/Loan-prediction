@@ -62,9 +62,7 @@ def ingest_user_transaction(user_data):
     # --- Verification output ---
     for doc in documents:
         print(f"Document added - Content: {doc.page_content}")
-
     print(f"Successfully ingested {len(documents)} user embeddings into MongoDB Atlas Vector Store.")
 
 if __name__ == "__main__":
-
     ingest_user_transaction(user_data)

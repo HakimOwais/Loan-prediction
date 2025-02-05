@@ -9,7 +9,7 @@ class RecommendationRequest(BaseModel):
     answers: Dict[str, str]
 
 class PersonalizedChat(BaseModel):
-    email: EmailStr
+    email: str
     query: str
 
 class UserDetails(BaseModel):
