@@ -7,6 +7,13 @@ import json
 import time
 import openai
 from pymongo import MongoClient
+import sys
+from pathlib import Path
+
+# # Adding the below path to avoid module not found error
+PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
+sys.path.append(str(PACKAGE_ROOT))
+from src.components import client, llm, embeddings, TRANSACTION_COLLECTION
 
 # Import the MongoDB Atlas Vector Search store and OpenAIEmbeddings.
 from langchain_openai import OpenAIEmbeddings
@@ -16,29 +23,12 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 
 # --- Connect to MongoDB ---
-client = MongoClient("")
-db = client["bank_db"]
-users_collection = db["users"]
+ATLAS_VECTOR_SEARCH_INDEX_NAME = "personal_chat_transaction"
 
-# --- Set up your MongoDB Atlas Vector Store ---
-DB_NAME = "bank_db"
-COLLECTION_NAME = "users"  # This collection will store transaction documents
-ATLAS_VECTOR_SEARCH_INDEX_NAME = "chat_user_index"
-openai.api_key = ""
-
-
-# Instantiate your embedding model (using OpenAI's embedding model)
-embeddings = OpenAIEmbeddings(
-                              model="text-embedding-ada-002")
-
-# Initialize the MongoDB client and get the collection
-# client = MongoClient(MONGO_URI)
-collection = client[DB_NAME][COLLECTION_NAME]
-
-# Create the vector store instance.
-vector_store = MongoDBAtlasVectorSearch(
+# Create the vector store instance fro transactions.
+vector_store_transactions = MongoDBAtlasVectorSearch(
     embedding=embeddings,
-    collection=collection,
+    collection=TRANSACTION_COLLECTION,
     index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
     relevance_score_fn="cosine",  # or another similarity function as needed
 )
@@ -47,28 +37,34 @@ vector_store = MongoDBAtlasVectorSearch(
 with open("chatbot/user.json", "r") as file:
     user_data = json.load(file)
 
-documents = []
 
-for user in user_data:
-    transactions_str = json.dumps(user["transactions"])  # Convert list to JSON string
+def ingest_user_transaction(user_data):
+    documents = []
 
-    # Document 1: Embedding for user details
-    user_doc = Document(    
-        page_content=transactions_str,  
-        metadata={
-            "_id": user['_id'],
-            "name": user['name'],
-            "email": user['email'],
-            "password": user['password'],  # Password included
-        }
-    )
-    documents.append(user_doc)
+    for user in user_data:
+        transactions_str = json.dumps(user["transactions"])  # Convert list to JSON string
 
-# --- Add Documents to MongoDB Atlas Vector Store ---
-vector_store.add_documents(documents)
+        # Document 1: Embedding for user details
+        user_doc = Document(    
+            page_content=transactions_str,  
+            metadata={
+                "user_id": user['_id'],
+                "name": user['name'],
+                "email": user['email'],
+                "password": user['password'],  # Password included
+            }
+        )
+        documents.append(user_doc)
 
-# --- Verification output ---
-for doc in documents:
-    print(f"Document added - Content: {doc.page_content}")
+    # --- Add Documents to MongoDB Atlas Vector Store ---
+    vector_store_transactions.add_documents(documents)
 
-print(f"Successfully ingested {len(documents)} user embeddings into MongoDB Atlas Vector Store.")
+    # --- Verification output ---
+    for doc in documents:
+        print(f"Document added - Content: {doc.page_content}")
+
+    print(f"Successfully ingested {len(documents)} user embeddings into MongoDB Atlas Vector Store.")
+
+if __name__ == "__main__":
+
+    ingest_user_transaction(user_data)

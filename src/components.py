@@ -37,4 +37,8 @@ vector_store = MongoDBAtlasVectorSearch(
     relevance_score_fn="cosine",
 )
 
+# DB setup for transaction collection
+TRANSACTION_COLLECTION_NAME = "transactions"
+TRANSACTION_COLLECTION = client[DB_NAME][TRANSACTION_COLLECTION_NAME]
+
 

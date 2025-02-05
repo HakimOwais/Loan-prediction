@@ -21,8 +21,9 @@ PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
 from src.card_recommender import category_questions, recommend_card_based_on_user_input
 from src.components import vector_store
-from application.schema import RecommendationRequest, UserDetails
+from application.schema import RecommendationRequest, UserDetails, PersonalizedChat
 from src.user_db import insert_user_details
+from chatbot.rag import qa_transactions_driver
 
 
 # # Then perform import
@@ -111,7 +112,6 @@ def recommend_card(request: RecommendationRequest):
     
     if category not in category_questions:
         raise HTTPException(status_code=400, detail="Invalid category")
-
     # # Convert user input into a query
     # query = f"User Category: {category}, Preferences: {json.dumps(user_input)}"
 
@@ -124,38 +124,44 @@ def recommend_card(request: RecommendationRequest):
 
     if not results:
         return {"message": "No matching cards found for your preferences."}
-
     recommended_cards = [
         {"card_name": res.metadata.get("cardName"), "about_card": res.page_content, "type" : res.metadata.get("type"),"benefits": res.metadata.get("benefits") }
         for res in results
     ]
-
     return {"category": category, "recommendations": recommended_cards}
+
+@app.post("/personalized_chat")
+async def personalised_chat(chat_input : PersonalizedChat):
+     try:
+          chat_input_data = chat_input.model_dump()
+
+          response = qa_transactions_driver(email=chat_input_data["email"], query=chat_input_data["query"])
+          # Return the response (assuming qa_transactions_driver returns a result)
+          return {"status": "success", "response": response}
+     except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.post("/users/")
 async def create_user(user: UserDetails):
     try:
-        # Log user data before passing to insert function
-        print(f"Received user data: {user.dict()}")
-        
-        # Convert Pydantic model to a dictionary
-        user_data = user.dict()  # or user.model_dump()
+        user_data = user.model_dump()  # Convert Pydantic model to dict (use .dict() for Pydantic v1)
 
-        # Insert user details into MongoDB and get the generated password and bank account number
-        password = insert_user_details(user_data)
-        bank_account_number = insert_user_details(user_data)
+        print(f"Received user data: {user_data}")  # Logging
+
+        # Insert user details into MongoDB
+        password, bank_account_number = insert_user_details(user_data)
+
         return {
             "message": "User created successfully",
             "password": password,
             "bank_account_number": bank_account_number
         }
-        
+
     except ValueError as e:
-        # If required fields are missing or invalid category
         print(f"ValueError: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))  # <-- Now it will show in Swagger docs!
+
     except Exception as e:
-        # For other exceptions
         print(f"Exception: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
