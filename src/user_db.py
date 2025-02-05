@@ -83,7 +83,7 @@ def insert_user_details(user_details):
     inserted_user = MONGODB_USER_COLLECTION.insert_one(user_details)
 
     # Now create a transaction document for the user
-    authenticate_and_create_transaction(user_details["email_address"], user_details["government_id"])
+    # authenticate_and_create_transaction(user_details["email_address"], user_details["government_id"])
 
     return password, user_details["bank_account_number"]
 
