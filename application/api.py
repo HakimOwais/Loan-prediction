@@ -21,9 +21,10 @@ PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
 from src.card_recommender import category_questions, recommend_card_based_on_user_input
 from src.components import vector_store
-from application.schema import RecommendationRequest, UserDetails, PersonalizedChat
+from application.schema import RecommendationRequest, UserDetails, PersonalizedChat, SavingPlanRequest
 from src.user_db import insert_user_details
 from chatbot.rag import qa_transactions_driver
+from src.saving_plan_recommender import recommend_saving_plans
 
 
 # # Then perform import
@@ -188,7 +189,22 @@ async def get_user(phone_number: str = Query(...), password: str = Query(...)):
     except Exception as e:
         print(f"Exception: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+# Route for recommendation
+@app.post("/recommend_saving_plans", response_model=List[Dict])
+async def recommend_saving_plans_route(request: SavingPlanRequest):
+    # Call the existing function `recommend_saving_plans` with the provided parameters
+    result = recommend_saving_plans(
+        category=request.category,
+        withdrawal_flexibility=request.withdrawal_flexibility,
+        # minimum_balance=request.minimum_balance,
+        minimum_monthly_payment=request.minimum_monthly_payment
+    )
 
+    # Extract only metadata part from the result
+    metadata_result = [doc.metadata for doc in result]
+
+    return metadata_result
 
 if __name__ == '__main__':
 	uvicorn.run(app, host='127.0.0.1', port=8080)

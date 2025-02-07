@@ -27,3 +27,9 @@ class UserDetails(BaseModel):
     
     class Config:
         orm_mode = True
+
+class SavingPlanRequest(BaseModel):
+    category: str
+    withdrawal_flexibility: str
+    # minimum_balance: int
+    minimum_monthly_payment: int
