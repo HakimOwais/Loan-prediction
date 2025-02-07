@@ -197,8 +197,8 @@ async def recommend_saving_plans_route(request: SavingPlanRequest):
     result = recommend_saving_plans(
         category=request.category,
         withdrawal_flexibility=request.withdrawal_flexibility,
-        # minimum_balance=request.minimum_balance,
-        minimum_monthly_payment=request.minimum_monthly_payment
+        maximum_balance=request.maximum_balance,
+        maximum_monthly_payment=request.maximum_monthly_payment
     )
 
     # Extract only metadata part from the result

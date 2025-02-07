@@ -31,5 +31,5 @@ class UserDetails(BaseModel):
 class SavingPlanRequest(BaseModel):
     category: str
     withdrawal_flexibility: str
-    # minimum_balance: int
-    minimum_monthly_payment: int
+    maximum_balance: int
+    maximum_monthly_payment: int
