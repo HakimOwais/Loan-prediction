@@ -41,4 +41,14 @@ vector_store = MongoDBAtlasVectorSearch(
 TRANSACTION_COLLECTION_NAME = "transactions"
 TRANSACTION_COLLECTION = client[DB_NAME][TRANSACTION_COLLECTION_NAME]
 
+# SAVING PLAN SETUP
+SAVINGPLAN_COLLECTION_NAME = "saving_plans"
+SAVINGPLAN_COLLECTION = client[DB_NAME][SAVINGPLAN_COLLECTION_NAME]
+ATLAS_VECTOR_SEARCH_INDEX_NAME = "saving_plan_index"
+vector_store_savingplan = MongoDBAtlasVectorSearch(
+    embedding=embeddings,
+    collection=SAVINGPLAN_COLLECTION,
+    index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
+    relevance_score_fn="cosine",
+)
 

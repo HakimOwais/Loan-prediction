@@ -14,6 +14,9 @@ from fastapi import Query
 
 import json
 from typing import Dict, List
+import json
+from pymongo import MongoClient
+from langchain.schema import Document
 
 
 # # Adding the below path to avoid module not found error
@@ -21,9 +24,11 @@ PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
 from src.card_recommender import category_questions, recommend_card_based_on_user_input
 from src.components import vector_store
-from application.schema import RecommendationRequest, UserDetails, PersonalizedChat
+from application.schema import RecommendationRequest, UserDetails, PersonalizedChat, SavingPlanRequest, SavingsRequest, UserTransaction
 from src.user_db import insert_user_details
 from chatbot.rag import qa_transactions_driver
+from src.saving_plan_recommender import recommend_saving_plans, calculate_savings
+from chatbot.ingest import vector_store_transactions
 
 
 # # Then perform import
@@ -188,7 +193,55 @@ async def get_user(phone_number: str = Query(...), password: str = Query(...)):
     except Exception as e:
         print(f"Exception: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+# Route for recommendation
+@app.post("/recommend_saving_plans", response_model=List[Dict])
+async def recommend_saving_plans_route(request: SavingPlanRequest):
+    # Call the existing function `recommend_saving_plans` with the provided parameters
+    result = recommend_saving_plans(
+        category=request.category,
+        withdrawal_flexibility=request.withdrawal_flexibility,
+        maximum_balance=request.maximum_balance,
+        maximum_monthly_payment=request.maximum_monthly_payment
+    )
 
+    # Extract only metadata part from the result
+    metadata_result = [doc.metadata for doc in result]
+
+    return metadata_result
+
+@app.post("/calculate_savings/")
+def get_savings(request: SavingsRequest):
+    result = calculate_savings(request.plan_id, request.months)
+    
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+
+    return result
+
+@app.post("/ingest_transaction/")
+def ingest_user_transaction(user: UserTransaction):
+    try:
+        transactions_str = json.dumps(user.transactions)  # Convert transactions to JSON string
+
+        # Document for vector store
+        user_doc = Document(
+            page_content=transactions_str,
+            metadata={
+                "user_id": user.user_id,
+                "name": user.name,
+                "email": user.email,
+                "password": user.password,  # Consider hashing for security
+            }
+        )
+
+        # Add document to vector store
+        vector_store_transactions.add_documents([user_doc])
+
+        return {"message": "User transaction data ingested successfully", "user_id": user.user_id}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
 	uvicorn.run(app, host='127.0.0.1', port=8080)

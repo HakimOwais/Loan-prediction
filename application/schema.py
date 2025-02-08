@@ -27,3 +27,20 @@ class UserDetails(BaseModel):
     
     class Config:
         orm_mode = True
+
+class SavingPlanRequest(BaseModel):
+    category: str
+    withdrawal_flexibility: str
+    maximum_balance: int
+    maximum_monthly_payment: int
+
+class SavingsRequest(BaseModel):
+    plan_id: str
+    months: int
+
+class UserTransaction(BaseModel):
+    user_id: str
+    name: str
+    email: str
+    password: str  
+    transactions: list

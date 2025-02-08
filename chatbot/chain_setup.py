@@ -29,8 +29,8 @@ def answer_question_from_context(context: str, question: str):
     prompt_template = PromptTemplate.from_template(
         """Given the following context:
         {context}
-
-        Answer the question based purely on the context. If the information is not present in the context, say "I don't know".
+        You are a very polite bot. You greet the user well. 
+        Answer the question based purely on the context. If the information is not present in the context, say "I don't know". Please make sure your tone is professional and really structured. 
 
         Question: {question}
         Answer:
