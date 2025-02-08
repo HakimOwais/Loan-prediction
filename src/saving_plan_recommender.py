@@ -2,10 +2,10 @@ from pymongo import MongoClient
 from src.components import vector_store_savingplan, SAVINGPLAN_COLLECTION
 
 
-query = "recommend me some svaing plans for very medium withrawal flexibility, the minimum amount I can deposit is  2500, and for monthly  down paymet i can deposit 100 "
-filter_condition = {"category": {"$eq": "salaried"}}
-result = vector_store_savingplan.similarity_search(query, k=2, pre_filter=filter_condition)
-print(result)
+# query = "recommend me some svaing plans for very medium withrawal flexibility, the minimum amount I can deposit is  2500, and for monthly  down paymet i can deposit 100 "
+# filter_condition = {"category": {"$eq": "salaried"}}
+# result = vector_store_savingplan.similarity_search(query, k=2, pre_filter=filter_condition)
+# print(result)
 
 def recommend_saving_plans(category, withdrawal_flexibility, maximum_monthly_payment, maximum_balance):
     query = f"""
