@@ -30,9 +30,9 @@ class UserDetails(BaseModel):
 
 class SavingPlanRequest(BaseModel):
     category: str
-    withdrawal_flexibility: str
     maximum_balance: int
     maximum_monthly_payment: int
+    annual_income : int
 
 class SavingsRequest(BaseModel):
     plan_id: str
@@ -44,3 +44,15 @@ class UserTransaction(BaseModel):
     email: str
     password: str  
     transactions: list
+    annual_income: int
+
+class Transaction(BaseModel):
+    date: str
+    amount: float
+    category: str
+
+class AutoSavingPlanRequest(BaseModel):
+    category: str
+    annual_income: float
+    transaction_history: List[Transaction]
+    k: int = 3

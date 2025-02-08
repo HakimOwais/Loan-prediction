@@ -52,7 +52,8 @@ def saving_plan_loader():
             "withdrawal_flexibility": saving_plan["withdrawal_flexibility"],
             "minimum_monthly_payment": saving_plan["minimum_monthly_payment"],
             "target_audience": saving_plan["target_audience"],
-            "features": saving_plan["features"]
+            "features": saving_plan["features"],
+            "minimum_annual_income": saving_plan["minimum_annual_income"]
         }
     )
         documents.append(doc)
@@ -62,4 +63,4 @@ def saving_plan_loader():
     print(f"Successfully ingested {len(documents)} saving plans into MongoDB Atlas Vector Store.")
 
 # card_loader()
-saving_plan_loader()
+# saving_plan_loader()

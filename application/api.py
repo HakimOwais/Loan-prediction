@@ -24,10 +24,10 @@ PACKAGE_ROOT = Path(os.path.abspath(os.path.dirname(__file__))).parent
 sys.path.append(str(PACKAGE_ROOT))
 from src.card_recommender import category_questions, recommend_card_based_on_user_input
 from src.components import vector_store
-from application.schema import RecommendationRequest, UserDetails, PersonalizedChat, SavingPlanRequest, SavingsRequest, UserTransaction
+from application.schema import RecommendationRequest, UserDetails, PersonalizedChat, SavingPlanRequest, SavingsRequest, UserTransaction, AutoSavingPlanRequest
 from src.user_db import insert_user_details
 from chatbot.rag import qa_transactions_driver
-from src.saving_plan_recommender import recommend_saving_plans, calculate_savings
+from src.saving_plan_recommender import recommend_saving_plans, calculate_savings, auto_saving_plan_recommender
 from chatbot.ingest import vector_store_transactions
 
 
@@ -200,9 +200,9 @@ async def recommend_saving_plans_route(request: SavingPlanRequest):
     # Call the existing function `recommend_saving_plans` with the provided parameters
     result = recommend_saving_plans(
         category=request.category,
-        withdrawal_flexibility=request.withdrawal_flexibility,
         maximum_balance=request.maximum_balance,
-        maximum_monthly_payment=request.maximum_monthly_payment
+        maximum_monthly_payment=request.maximum_monthly_payment,
+        annual_income=request.annual_income
     )
 
     # Extract only metadata part from the result
@@ -231,7 +231,8 @@ def ingest_user_transaction(user: UserTransaction):
                 "user_id": user.user_id,
                 "name": user.name,
                 "email": user.email,
-                "password": user.password,  # Consider hashing for security
+                "password": user.password, 
+                "annual_income": user.annual_income
             }
         )
 
@@ -239,6 +240,35 @@ def ingest_user_transaction(user: UserTransaction):
         vector_store_transactions.add_documents([user_doc])
 
         return {"message": "User transaction data ingested successfully", "user_id": user.user_id}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# AUTO SAVING PLAN RECOMMENDER
+@app.post("/auto_recommend_savings_plans/")
+async def recommend_savings_plans(request: AutoSavingPlanRequest):
+    try:
+        # Call the function with the provided data
+        context, response = auto_saving_plan_recommender(
+            category=request.category,
+            annual_income=request.annual_income,
+            transaction_history=request.transaction_history,
+            k=request.k
+        )
+        print(context)
+        print("=====RESPONSE===")
+        print(response)
+
+        # Extract recommended savings plans (ensure to convert document objects to dict)
+        recommended_plans = [doc.metadata for doc in context]
+       
+        transaction_suggestion = response.content if hasattr(response, 'content') else ""
+
+        # Return the simplified response
+        return {
+            "recommended_savings_plans": recommended_plans,
+            "suggestion_based_on_transactions": transaction_suggestion
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
