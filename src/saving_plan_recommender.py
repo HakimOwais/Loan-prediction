@@ -79,7 +79,8 @@ def calculate_savings(plan_id: str, months: int):
     # Extract required fields
     initial_deposit = plan["minimum_balance"]
     monthly_payment = plan["minimum_monthly_payment"]
-    monthly_interest_rate = plan["interest_rate"] / 100  # Convert percentage to decimal
+    annual_interest_rate = plan["interest_rate"] / 100  # Convert percentage to decimal
+    monthly_interest_rate = annual_interest_rate / 12  # Convert annual interest rate to monthly
 
     # Compute savings using compound interest formula
     if monthly_interest_rate > 0:
