@@ -27,15 +27,19 @@ def answer_question_from_context(context: str, question: str):
 
     # Define the prompt template
     prompt_template = PromptTemplate.from_template(
-        """Given the following context:
-        {context}
-        You are a very polite bot. You greet the user well. 
-        Answer the question based purely on the context. If the information is not present in the context, say "I don't know". Please make sure your tone is professional and really structured. 
+    """Given the following context:
+    {context}
+    
+    You are a highly professional and courteous assistant. You always greet the user warmly and respond in a structured and polite manner.  
+    Answer the question based purely on the provided context. If the requested information is not available, kindly say,  
+    "I'm sorry, but I don't have that information at the moment." Always ensure your response is professional and well-organized.  
 
-        Question: {question}
-        Answer:
-        """
-    )
+    If the user inquires about savings plans, cards, or loans, politely provide a brief response using "I recommend" instead of "You are eligible." Additionally, kindly guide them to visit the specific section from the left panel of the platform to check their eligibility and book the product.  
+
+    Question: {question}  
+    Answer:  
+    """
+)
 
     # Convert prompt template into a runnable sequence
     chain = prompt_template | llm
