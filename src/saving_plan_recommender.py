@@ -69,7 +69,6 @@ def auto_saving_plan_recommender(category, annual_income, transaction_history, k
     
 
 
-# Calclute saving after months
 def calculate_savings(plan_id: str, months: int):
     # Fetch the plan details from MongoDB
     plan = SAVINGPLAN_COLLECTION.find_one({"plan_id": plan_id})
@@ -91,11 +90,16 @@ def calculate_savings(plan_id: str, months: int):
     else:
         total_savings = initial_deposit + (monthly_payment * months)
 
+    # Calculate the total amount deposited
+    total_deposited = initial_deposit + (monthly_payment * months)
+
     return {
         "plan_id": plan_id,
         "months": months,
-        "total_savings": round(total_savings, 2)
+        "total_savings": round(total_savings, 2),
+        "total_deposited": round(total_deposited, 2)
     }
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,94 @@
+[
+    {
+      "plan_id": "SP021",
+      "name": "Student Starter Savings",
+      "category": "student",
+      "interest_rate": 4.5,
+      "minimum_balance": 500,
+      "minimum_monthly_payment": 50,
+      "withdrawal_flexibility": "High",
+      "minimum_annual_income": 0,
+      "target_audience": "College and University Students",
+      "features": ["Zero account fees", "Easy withdrawals", "Financial literacy workshops"],
+      "aboutsavingPlan": "The Student Starter Savings plan offers a 4.5% annual interest rate and is designed to help college and university students get started with saving. The plan requires a minimum balance of 500 and a minimum monthly payment of 50. It features easy withdrawals and financial literacy workshops to help students manage their finances better."
+    },
+    {
+      "plan_id": "SP022",
+      "name": "Student Future Fund",
+      "category": "student",
+      "interest_rate": 5.0,
+      "minimum_balance": 1000,
+      "minimum_monthly_payment": 100,
+      "withdrawal_flexibility": "Medium",
+      "minimum_annual_income": 0,
+      "target_audience": "Undergraduate and Graduate Students",
+      "features": ["Education savings", "Flexible deposit options", "Low fees"],
+      "aboutsavingPlan": "The Student Future Fund offers a 5.0% annual interest rate and is tailored for undergraduate and graduate students who are looking to save for their future. With a minimum balance of 1,000 and a monthly payment of 100, this plan helps students accumulate funds for educational expenses with flexible deposits and low fees."
+    },
+    {
+      "plan_id": "SP023",
+      "name": "Scholar Savings Plan",
+      "category": "student",
+      "interest_rate": 4.2,
+      "minimum_balance": 800,
+      "minimum_monthly_payment": 70,
+      "withdrawal_flexibility": "High",
+      "minimum_annual_income": 0,
+      "target_audience": "High School and College Students",
+      "features": ["Scholarship fund options", "Easy access to funds", "No withdrawal fees"],
+      "aboutsavingPlan": "The Scholar Savings Plan offers a 4.2% annual interest rate and is aimed at high school and college students looking to save for scholarships or education-related expenses. The plan allows for easy access to funds with no withdrawal fees and requires a minimum balance of 800 with monthly payments of 70."
+    },
+    {
+      "plan_id": "SP024",
+      "name": "Study Abroad Savings",
+      "category": "student",
+      "interest_rate": 5.5,
+      "minimum_balance": 1500,
+      "minimum_monthly_payment": 150,
+      "withdrawal_flexibility": "Medium",
+      "minimum_annual_income": 0,
+      "target_audience": "Students Planning to Study Abroad",
+      "features": ["Travel-related savings", "Currency exchange benefits", "Study abroad assistance"],
+      "aboutsavingPlan": "The Study Abroad Savings plan offers a 5.5% annual interest rate and is designed for students planning to study abroad. With a minimum balance of 1,500 and monthly payments of 150, this plan provides currency exchange benefits and financial assistance for students traveling overseas for education."
+    },
+    {
+      "plan_id": "SP025",
+      "name": "Tech-Savvy Student Savings",
+      "category": "student",
+      "interest_rate": 4.8,
+      "minimum_balance": 600,
+      "minimum_monthly_payment": 60,
+      "withdrawal_flexibility": "High",
+      "minimum_annual_income": 0,
+      "target_audience": "Tech-Savvy Students",
+      "features": ["Tech-related savings", "Discounts on gadgets", "Online account management"],
+      "aboutsavingPlan": "The Tech-Savvy Student Savings plan offers a 4.8% annual interest rate and caters to tech-savvy students who want to save for tech-related expenses. It provides discounts on gadgets and easy online account management. The plan requires a minimum balance of 600 and a monthly payment of 60."
+    },
+    {
+      "plan_id": "SP026",
+      "name": "Student Health Fund",
+      "category": "student",
+      "interest_rate": 4.0,
+      "minimum_balance": 400,
+      "minimum_monthly_payment": 40,
+      "withdrawal_flexibility": "High",
+      "minimum_annual_income": 0,
+      "target_audience": "Students Focusing on Health and Wellness",
+      "features": ["Health-related savings", "Medical insurance options", "Easy withdrawals"],
+      "aboutsavingPlan": "The Student Health Fund offers a 4.0% annual interest rate and is designed for students focusing on health and wellness. It allows for easy access to funds for medical expenses and offers options for medical insurance. The plan requires a minimum balance of 400 and a minimum monthly payment of 40."
+    },
+    {
+      "plan_id": "SP027",
+      "name": "Emergency Fund for Students",
+      "category": "student",
+      "interest_rate": 4.3,
+      "minimum_balance": 500,
+      "minimum_monthly_payment": 50,
+      "withdrawal_flexibility": "Very High",
+      "minimum_annual_income": 0,
+      "target_audience": "Students Seeking Emergency Fund Savings",
+      "features": ["Quick access to funds", "Zero fees for emergencies", "Low minimum balance"],
+      "aboutsavingPlan": "The Emergency Fund for Students offers a 4.3% annual interest rate and is designed to help students build an emergency fund. With quick access to funds, zero fees for emergencies, and a low minimum balance of 500, this plan is perfect for students who want to be prepared for unexpected costs."
+    }
+  ]
+  

@@ -52,6 +52,7 @@ def ingest_user_transaction(user_data):
                 "name": user['name'],
                 "email": user['email'],
                 "password": user['password'],  # Password included
+                "loans_eligible_for": user['loans_eliglible for']
             }
         )
         documents.append(user_doc)
@@ -65,4 +66,7 @@ def ingest_user_transaction(user_data):
     print(f"Successfully ingested {len(documents)} user embeddings into MongoDB Atlas Vector Store.")
 
 if __name__ == "__main__":
-    ingest_user_transaction(user_data)
+    # --- Load and convert the JSON data to Documents ---
+    with open("demo_transaction.json", "r") as file:
+        demo_transaction = json.load(file)
+    ingest_user_transaction(demo_transaction)

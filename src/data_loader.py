@@ -36,7 +36,7 @@ def card_loader():
 # saving plan Loader
 def saving_plan_loader():
     # Load the card data from the JSON file
-    with open("saving_plans.json", "r") as file:
+    with open("saving_plan_student.json", "r") as file:
         saving_plans = json.load(file)
     documents = []
 
