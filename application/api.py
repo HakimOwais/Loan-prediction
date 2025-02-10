@@ -68,37 +68,44 @@ class LoanPred(BaseModel):
 def index():
     return {'message': 'Welcome to Loan Prediction App'}
 
-# defining the function which will make the prediction using the data which the user inputs 
 @app.post('/predict')
 def predict_loan_status(loan_details: LoanPred):
-	data = loan_details.model_dump()
-	new_data = {
-    'no_of_dependents': data['Dependents'],  # number of people an applicant is financially responsible for, like children or spouses, 
-    'education': data['Education'], # e.g Graduate or Non Graduate
-    'self_employed': data['Self_Employed'], #Yes or No
-    'income_annum': data['TotalIncome'],  # 9600000
-    'loan_amount': data['LoanAmount'], 
-    'loan_term': data['Loan_Amount_Term'], # years
-    'cibil_score': data['Credit_History'], # score
-    'residential_assets_value': data['Residential_Assets_Value'],  # market value of the borrower's primary residence
-    'commercial_assets_value': data['Commercial_Assets_Value'], # e.g., property, equipment 
-    'luxury_assets_value': data['Luxury_Assets_Value'], # cars etc
-    'bank_asset_value': data['Bank_Asset_Value']
-	}
+    data = loan_details.model_dump()
+    
+    new_data = {
+        'no_of_dependents': data['Dependents'],
+        'education': data['Education'],
+        'self_employed': data['Self_Employed'],
+        'income_annum': data['TotalIncome'],
+        'loan_amount': data['LoanAmount'],
+        'loan_term': data['Loan_Amount_Term'],
+        'cibil_score': data['Credit_History'],
+        'residential_assets_value': data['Residential_Assets_Value'],
+        'commercial_assets_value': data['Commercial_Assets_Value'],
+        'luxury_assets_value': data['Luxury_Assets_Value'],
+        'bank_asset_value': data['Bank_Asset_Value']
+    }
 
-# Create a DataFrame with a single row from the new_data dictionary
-	df = pd.DataFrame([new_data])
+    # ✅ Fix indentation
+    df = pd.DataFrame([new_data])
 
-	# Making predictions 
-	prediction = classification_pipeline.predict(df)
+    # List of columns to transform
+    log_columns = ['income_annum', 'loan_amount',
+                   'residential_assets_value',
+                 'commercial_assets_value', 
+                   'luxury_assets_value', 'bank_asset_value']
 
-	if prediction[0] == 0:
-		pred = 'Not Eligible'
-	else:
-		pred = 'Eligible'
+    # Apply log transformation (handling zero/negative values)
+    df[log_columns] = df[log_columns].replace(0, np.nan)  # Avoid log(0)
+    df[log_columns] = np.log(df[log_columns])
+    # Fix variable assignment
+    # df_transformed = classification_pipeline
+    # Making predictions 
+    prediction = classification_pipeline.predict(df)
 
-	return {'Status of Loan Application':pred}
+    pred = 'Eligible' if prediction[0] == 1 else 'Not Eligible'
 
+    return {'Status of Loan Application': pred}
 
 # Endpoint to get category-specific questions
 @app.get("/get-questions/{category}")
