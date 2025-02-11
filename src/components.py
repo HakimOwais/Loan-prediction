@@ -18,6 +18,7 @@ OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
 
 # Setting up Chat Model
 llm = ChatOpenAI(model="gpt-3.5-turbo")
+llm_gpt_4 = ChatOpenAI(model="gpt-4-turbo")
 
 # Setting up embedding model
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")

@@ -54,7 +54,8 @@ def ingest_user_transaction(user_data):
                 "password": user['password'],  # Password included
                 "loans_eliglible_for": user['loans_eliglible_for'],
                 "saving_plans_eligibility": user['saving_plans_eligibility'],
-                "card_recommendation": user["card_recommendation"]
+                "card_recommendation": user["card_recommendation"],
+                "transactions" : user["transactions"]
 
             }
         )
@@ -70,6 +71,6 @@ def ingest_user_transaction(user_data):
 
 if __name__ == "__main__":
     # --- Load and convert the JSON data to Documents ---
-    with open("demo_transaction.json", "r") as file:
+    with open("demo_transaction_2.json", "r") as file:
         demo_transaction = json.load(file)
     ingest_user_transaction(demo_transaction)   
