@@ -42,39 +42,49 @@ def insert_user_details(user_details):
     # Check if user already exists (by email or government ID)
     existing_user = MONGODB_USER_COLLECTION.find_one({
         "$or": [
-            {"email_address": user_details["email_address"]},
+            {"email": user_details["email"]},
             {"government_id": user_details["government_id"]}
         ]
     })
 
     if existing_user:
         raise ValueError(
-            f"User already exists with email {user_details['email_address']} or government ID {user_details['government_id']}"
+            f"User already exists with email {user_details['email']} or government ID {user_details['government_id']}"
         )
 
     # Ensure required fields are present
     required_fields = [
-        "full_name", "date_of_birth", "gender", "nationality",
-        "residential_address", "mailing_address", "phone_number", "email_address",
-        "government_id", "ssn_tin", "category"
+        "first_name", "last_name", "dob", "gender", "nationality",
+        "residential_address", "mailing_address", "phone", "email",
+        "government_id", "ssn_tin", "category", "account_type"
     ]
     
     for field in required_fields:
         if field not in user_details:
             raise ValueError(f"Missing required field: {field}")
-    
-    # Ensure category is valid
-    valid_categories = {"student", "salaried", "business"}
+
+    # Ensure account_type and category are valid
+    valid_account_types = {
+        "Saving Account", "Current Account", "Salary Account", "Student Account", "Business Account"
+    }
+    valid_categories = {"savings", "current", "salaried", "student", "business"}
+
+    if user_details["account_type"] not in valid_account_types:
+        raise ValueError(f"Invalid account type. Choose from: {', '.join(valid_account_types)}")
+
     if user_details["category"] not in valid_categories:
-        raise ValueError("Invalid category. Choose from: student, salaried, business")
+        raise ValueError(f"Invalid category. Choose from: {', '.join(valid_categories)}")
 
-    # Convert date_of_birth to datetime if necessary
-    if isinstance(user_details.get("date_of_birth"), datetime.date):
-        user_details["date_of_birth"] = datetime.datetime.combine(user_details["date_of_birth"], datetime.time())
+    # Ensure "Employer Name" is present if account_type is "Salary Account"
+    if user_details["account_type"] == "Salary Account" and "employer_name" not in user_details:
+        raise ValueError("Employer Name is required for Salary Account")
 
-    # Generate a 4-digit password
-    password = generate_password()
-    user_details["password"] = password
+    # Convert dob to datetime if necessary
+    if isinstance(user_details.get("dob"), str):
+        try:
+            user_details["dob"] = datetime.datetime.strptime(user_details["dob"], "%d-%m-%Y")
+        except ValueError:
+            raise ValueError("Invalid date format for dob. Use DD-MM-YYYY.")
 
     # Generate and add a unique 10-digit bank account number
     user_details["bank_account_number"] = generate_unique_account_number()
@@ -82,10 +92,7 @@ def insert_user_details(user_details):
     # Insert into MongoDB
     inserted_user = MONGODB_USER_COLLECTION.insert_one(user_details)
 
-    # Now create a transaction document for the user
-    # authenticate_and_create_transaction(user_details["email_address"], user_details["government_id"])
-
-    return password, user_details["bank_account_number"]
+    return user_details["bank_account_number"]
 
 
 if __name__ == "__main__":

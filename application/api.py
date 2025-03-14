@@ -156,26 +156,20 @@ async def personalised_chat(chat_input : PersonalizedChat):
 @app.post("/users/")
 async def create_user(user: UserDetails):
     try:
-        user_data = user.model_dump()  # Convert Pydantic model to dict (use .dict() for Pydantic v1)
+        user_data = user.model_dump()  # Convert Pydantic model to dict
 
         print(f"Received user data: {user_data}")  # Logging
 
         # Insert user details into MongoDB
-        password, bank_account_number = insert_user_details(user_data)
+        bank_account_number = insert_user_details(user_data)
 
         return {
             "message": "User created successfully",
-            "password": password,
             "bank_account_number": bank_account_number
         }
 
     except ValueError as e:
-        print(f"ValueError: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))  # <-- Now it will show in Swagger docs!
-
-    except Exception as e:
-        print(f"Exception: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=400, detail=str(e))
 
 from src.components import client
 

@@ -1,6 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, root_validator
 from typing import List
-from typing import Dict
+from typing import Dict, Literal, Optional
 from datetime import date
 
 # Define input model for card recommendation
@@ -13,18 +13,34 @@ class PersonalizedChat(BaseModel):
     query: str
 
 class UserDetails(BaseModel):
-    full_name: str
-    date_of_birth: date
+    account_type: Literal["Saving Account", "Current Account", "Salary Account", "Student Account", "Business Account"]
+    first_name: str
+    last_name: str
+    email: EmailStr
+    phone: str
+    dob: str  # Keeping as string since format is "DD-MM-YYYY"
     gender: str
     nationality: str
+    government_id: str
+    password: str
     residential_address: str
     mailing_address: str
-    phone_number: str
-    email_address: EmailStr
-    government_id: str
+    city: str = ""
+    state: str = ""
+    zip: str = ""
+    category: Literal["savings", "current", "salaried", "student", "business"]
     ssn_tin: str
-    category: str
-    
+    employer_name: Optional[str] = None  # Only required for Salary Account
+
+    @root_validator(pre=True)
+    def check_employer_name(cls, values):
+        if values.get("account_type") == "Salary Account":
+            if not values.get("employer_name"):
+                raise ValueError("Employer Name is required for Salary Account")
+        else:
+            values.pop("employer_name", None)  # Remove employer_name if not needed
+        return values
+
     class Config:
         orm_mode = True
 
