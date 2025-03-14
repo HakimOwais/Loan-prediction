@@ -153,7 +153,7 @@ async def personalised_chat(chat_input : PersonalizedChat):
      except Exception as e:
         return {"status": "error", "message": str(e)}
 
-@app.post("/users/")
+@app.post("/create-user/")
 async def create_user(user: UserDetails):
     try:
         user_data = user.model_dump()  # Convert Pydantic model to dict
