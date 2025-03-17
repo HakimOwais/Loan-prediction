@@ -12,8 +12,18 @@ class PersonalizedChat(BaseModel):
     email: str
     query: str
 
-class UserDetails(BaseModel):
+class AccountDetails(BaseModel):
     account_type: Literal["Saving Account", "Current Account", "Salary Account", "Student Account", "Business Account"]
+    category: Literal["savings", "current", "salaried", "student", "business"]
+    employer_name: Optional[str] = None  # Only required for salaried accounts
+
+    @classmethod
+    def validate_employer_name(cls, values):
+        if values.get("category") == "salaried" and not values.get("employer_name"):
+            raise ValueError("Employer Name is required for Salary Account")
+        return values
+
+class CustomerDetails(AccountDetails):
     first_name: str
     last_name: str
     email: EmailStr
@@ -28,21 +38,15 @@ class UserDetails(BaseModel):
     city: str = ""
     state: str = ""
     zip: str = ""
-    category: Literal["savings", "current", "salaried", "student", "business"]
     ssn_tin: str
-    employer_name: Optional[str] = None  # Only required for Salary Account
 
-    @root_validator(pre=True)
-    def check_employer_name(cls, values):
-        if values.get("account_type") == "Salary Account":
-            if not values.get("employer_name"):
-                raise ValueError("Employer Name is required for Salary Account")
-        else:
-            values.pop("employer_name", None)  # Remove employer_name if not needed
-        return values
+class LoginRequest(BaseModel):
+    phone: str
+    password: str
 
-    class Config:
-        orm_mode = True
+    
+
+
 
 class SavingPlanRequest(BaseModel):
     category: str
